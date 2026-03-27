@@ -30,7 +30,7 @@ jobs:
           
       - name: Install dependencies
         run: |
-          pip install python-dotenv requests beautifulsoup4 groq openrouter google-generativeai
+          pip install python-dotenv requests beautifulsoup4 groq openrouter google-generativeai apscheduler openai anthropic huggingface-hub
           uv sync
         
       - name: Set up .env
