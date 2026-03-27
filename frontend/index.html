@@ -11,18 +11,19 @@
         :root {
             --primary-color: #1a1a1a;
             --secondary-color: #292929;
-            --accent-color: #00a050;
-            --accent-hover: #008040;
+            --accent-color: #6366f1;
+            --accent-hover: #4f46e5;
             --text-color: #333;
             --text-light: #666;
             --text-muted: #999;
-            --bg-color: #fff;
+            --bg-color: #fafbfc;
             --bg-secondary: #f8f9fa;
             --bg-tertiary: #f1f3f4;
             --border-color: #e8e8e8;
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
             --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
-            --font-primary: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            --shadow-lg: 0 10px 40px rgba(99,102,241,0.15);
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             --font-serif: "Charter", "Bitstream Charter", "Sitka Text", Cambria, serif;
         }
 
@@ -75,7 +76,7 @@
         .logo-icon {
             width: 32px;
             height: 32px;
-            background: linear-gradient(135deg, var(--accent-color), #00c853);
+            background: linear-gradient(135deg, var(--accent-color), #818cf8);
             border-radius: 8px;
             display: flex;
             align-items: center;
@@ -111,6 +112,77 @@
             right: 0;
             height: 2px;
             background: var(--accent-color);
+        }
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236366f1' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 2rem;
+        }
+        
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+        }
+        
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .stat span {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+        
+        .stat small {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 1.8rem; }
+            .hero-stats { gap: 1.5rem; }
+            .stat span { font-size: 1.5rem; }
         }
 
         /* Main */
@@ -568,6 +640,18 @@
         </div>
     </header>
 
+    <div class="hero">
+        <div class="hero-content">
+            <h1>🤖 Your Daily Dose of Tech News</h1>
+            <p>AI-powered curation from Reddit, Hacker News, Dev.to & more</p>
+            <div class="hero-stats">
+                <div class="stat"><span>5</span><small>Articles</small></div>
+                <div class="stat"><span>4</span><small>Sources</small></div>
+                <div class="stat"><span>24/7</span><small>Automated</small></div>
+            </div>
+        </div>
+    </div>
+
     <main id="main-content">
         <section class="articles-section">
             <div class="articles-header">
@@ -717,70 +801,61 @@
             const container = document.getElementById('articles-list');
             const countEl = document.getElementById('article-count');
 
-            try {
-                // Fetch list of HTML files from output directory
-                const response = await fetch('/output/');
-                const text = await response.text();
-                
-                // Parse HTML to find links
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(text, 'text/html');
-                const links = Array.from(doc.querySelectorAll('a'))
-                    .map(a => a.href)
-                    .filter(href => href.endsWith('.html'))
-                    .map(href => href.split('/').pop())
-                    .slice(0, 20);
+            // Direct list of known articles (statically defined)
+            const knownArticles = [
+                '2026-03-27-get-started-on-devto-a-beginners-guide-to-engage-with-the-community.html',
+                '2026-03-27-revolutionary-ai-development-agents-that-can-think-but-not-remember.html',
+                '2026-03-27-the-dark-side-of-perfection-how-tech-professionals-are-at-risk-of-burnout.html',
+                '2026-03-27-this-article-was-automatically-generated-from-trending-tech-content.html',
+                '2026-03-27-weekly-roundup-top-tech-insights-from-devto.html'
+            ];
 
-                if (links.length === 0) {
-                    container.innerHTML = '<div class="loading"><p>No articles yet. Run the automation to generate content!</p></div>';
-                    countEl.textContent = '0 articles';
-                    return;
-                }
-
-                // Load each article and display summary
-                const articles = await Promise.all(
-                    links.map(async (file) => {
-                        try {
-                            const res = await fetch('/output/' + file);
-                            const html = await res.text();
-                            const doc = parser.parseFromString(html, 'text/html');
-                            
-                            const title = doc.querySelector('title')?.textContent?.replace(' - TechPulse', '') || 'Untitled';
-                            const content = doc.querySelector('.content')?.textContent || '';
-                            const summary = content.slice(0, 200).replace(/\n/g, ' ') + '...';
-                            const meta = doc.querySelector('.meta')?.textContent || '';
-                            const tags = doc.querySelector('.tags')?.innerHTML || '';
-
-                            return { file, title, summary: summary.slice(0, 150), meta, tags };
-                        } catch (e) {
-                            return null;
-                        }
-                    })
-                );
-
-                const validArticles = articles.filter(a => a !== null);
-                countEl.textContent = `${validArticles.length} articles`;
-
-                container.innerHTML = validArticles.map(article => `
-                    <article class="article-card">
-                        <div class="article-meta">
-                            <span class="article-source">TechPulse</span>
-                        </div>
-                        <h2 class="article-title">
-                            <a href="/?article=${article.file}">${article.title}</a>
-                        </h2>
-                        <p class="article-summary">${article.summary}</p>
-                        <div class="article-footer">
-                            <div class="article-tags">${article.tags}</div>
-                            <a href="/?article=${article.file}" class="read-more">Read more →</a>
-                        </div>
-                    </article>
-                `).join('');
-
-            } catch (e) {
-                container.innerHTML = '<div class="loading"><p>Error loading articles. Make sure the server is running.</p></div>';
-                console.error(e);
+            if (knownArticles.length === 0) {
+                container.innerHTML = '<div class="loading"><p>No articles yet. Run the automation to generate content!</p></div>';
+                countEl.textContent = '0 articles';
+                return;
             }
+
+            // Load each article and display summary
+            const articles = await Promise.all(
+                knownArticles.map(async (file) => {
+                    try {
+                        const res = await fetch('/output/' + file);
+                        const html = await res.text();
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        
+                        const title = doc.querySelector('title')?.textContent?.replace(' - TechPulse', '') || 'Untitled';
+                        const content = doc.querySelector('.content')?.textContent || '';
+                        const summary = content.slice(0, 200).replace(/\n/g, ' ') + '...';
+                        const meta = doc.querySelector('.meta')?.textContent || '';
+                        const tags = doc.querySelector('.tags')?.innerHTML || '';
+
+                        return { file, title, summary: summary.slice(0, 150), meta, tags };
+                    } catch (e) {
+                        return null;
+                    }
+                })
+            );
+
+            const validArticles = articles.filter(a => a !== null);
+            countEl.textContent = `${validArticles.length} articles`;
+
+            container.innerHTML = validArticles.map(article => `
+                <article class="article-card">
+                    <div class="article-meta">
+                        <span class="article-source">TechPulse</span>
+                    </div>
+                    <h2 class="article-title">
+                        <a href="/?article=${article.file}">${article.title}</a>
+                    </h2>
+                    <p class="article-summary">${article.summary}</p>
+                    <div class="article-footer">
+                        <div class="article-tags">${article.tags}</div>
+                        <a href="/?article=${article.file}" class="read-more">Read more →</a>
+                    </div>
+                </article>
+            `).join('');
         }
     </script>
 </body>
