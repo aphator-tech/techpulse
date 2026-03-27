@@ -556,6 +556,68 @@
             font-size: 0.9rem;
         }
 
+        /* Article View (full page) */
+        .article-view {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fafafa;
+        }
+        
+        .article-view .ad-box {
+            text-align: center;
+            margin: 20px 0;
+            min-height: 90px;
+        }
+        
+        .article-view h1 {
+            color: #1a1a2e;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .article-view h2 {
+            color: #333;
+            margin: 25px 0 15px;
+        }
+        
+        .article-view .meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        
+        .article-view .tag {
+            background: #e0e7ff;
+            color: #4338ca;
+            padding: 3px 10px;
+            border-radius: 15px;
+            margin-right: 5px;
+            font-size: 0.85em;
+            display: inline-block;
+        }
+        
+        .article-view .content {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            line-height: 1.7;
+        }
+        
+        .article-view ul, .article-view ol {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+        
+        .article-view li {
+            margin: 8px 0;
+        }
+        
+        .article-view a {
+            color: #4338ca;
+        }
+
         /* Footer */
         footer {
             background: var(--primary-color);
@@ -891,55 +953,16 @@
                 const response = await fetch('/output/' + file);
                 const html = await response.text();
                 
+                // Extract body content
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
+                const bodyContent = doc.querySelector('body').innerHTML;
                 
-                const title = (doc.querySelector('title')?.textContent || 'Article').replace(' - TechPulse', '').replace(/\*\*/g, '').trim();
-                const content = doc.querySelector('.content')?.innerHTML || '';
-                const meta = doc.querySelector('.meta')?.textContent || '';
-                const tags = doc.querySelector('.tags')?.innerHTML || '';
-
-                // Clean content - remove ** and fix formatting
-                const cleanContent = content
-                    .replace(/\*\*/g, '')
-                    .replace(/<br><br>/g, '</p><p>')
-                    .replace(/<p>/g, '<p>')
-                    .replace(/<strong>/g, '<h3>')
-                    .replace(/<\/strong>/g, '</h3>')
-                    .replace(/<em>/g, '<li>')
-                    .replace(/<\/em>/g, '</li>')
-                    .replace(/<pre>/g, '<pre><code>')
-                    .replace(/<\/pre>/g, '</code></pre>')
-                    .replace(/====+/g, '')
-                    .replace(/----+/g, '');
-
                 main.innerHTML = `
-                    <article class="article-full">
+                    <div class="article-view">
                         <a href="/" class="back-link">← Back to Articles</a>
-                        
-                        <div class="article-ad"><div id="container-45536f5d13364ca20573598656dee2c4"></div></div>
-                        
-                        <header class="article-header">
-                            <h1 class="article-title">${title}</h1>
-                            <div class="article-meta">
-                                <span class="article-source">TechPulse</span>
-                                <span>•</span>
-                                <span>${meta}</span>
-                            </div>
-                        </header>
-                        
-                        <div class="article-content">
-                            ${cleanContent}
-                        </div>
-                        
-                        <div class="article-tags">${tags}</div>
-                        
-                        <div class="smart-link-ad">
-                            <a href="https://www.profitablecpmratenetwork.com/ne52k66wv?key=dfef6a220fdf4b786aa36f64924efede" target="_blank" rel="nofollow">
-                                🔥 Hot Tech Deals - Check Out These Amazing Offers!
-                            </a>
-                        </div>
-                    </article>
+                        ${bodyContent}
+                    </div>
                 `;
             } catch (e) {
                 main.innerHTML = '<div class="article-view"><p>Article not found.</p><a href="/">Go Home</a></div>';
@@ -1000,10 +1023,10 @@
             }
 
             container.innerHTML = validArticles.map((article, index) => {
-                // Clean title - remove ** markers
-                const cleanTitle = article.title.replace(/\*\*/g, '').replace(/- TechPulse$/, '').trim();
-                // Clean summary - remove HTML tags and markdown
-                const cleanSummary = article.summary.replace(/<\/?[^>]+(>|$)/g, '').replace(/\*\*/g, '').trim();
+                // Clean title - just remove the suffix
+                const cleanTitle = article.title.replace(/\s*-\s*TechPulse$/i, '').trim();
+                // Clean summary - remove HTML tags
+                const cleanSummary = article.summary.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
                 
                 return `
                 <article class="article-card">
@@ -1014,7 +1037,7 @@
                     <h2 class="article-title">
                         <a href="/?article=${article.file}">${cleanTitle}</a>
                     </h2>
-                    <p class="article-summary">${cleanSummary}</p>
+                    <p class="article-summary">${cleanSummary.slice(0, 160)}...</p>
                     <div class="article-footer">
                         <div class="article-tags">${article.tags}</div>
                         <a href="/?article=${article.file}" class="read-more">Read more →</a>
