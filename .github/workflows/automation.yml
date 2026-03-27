@@ -24,7 +24,7 @@ jobs:
           python-version: '3.11'
           
       - name: Install dependencies
-        run: pip install python-dotenv requests beautifulsoup4 groq openrouter google-generativeai apscheduler openai anthropic huggingface-hub GitPython
+        run: pip install -r requirements.txt
         
       - name: Set up .env
         run: |
