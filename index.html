@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Latest tech news, tutorials, and insights from trending sources">
+    <meta name="theme-color" content="#00a050">
+    <title>TechPulse - Your Daily Tech News Source</title>
+    <link rel="alternate" type="application/rss+xml" title="TechPulse RSS Feed" href="/rss.xml">
+    <style>
+        :root {
+            --primary-color: #1a1a1a;
+            --secondary-color: #292929;
+            --accent-color: #00a050;
+            --accent-hover: #008040;
+            --text-color: #333;
+            --text-light: #666;
+            --text-muted: #999;
+            --bg-color: #fff;
+            --bg-secondary: #f8f9fa;
+            --bg-tertiary: #f1f3f4;
+            --border-color: #e8e8e8;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --font-primary: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            --font-serif: "Charter", "Bitstream Charter", "Sitka Text", Cambria, serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            color: var(--text-color);
+            background: var(--bg-color);
+            line-height: 1.6;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* Header */
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(255,255,255,0.98);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 100;
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-color), #00c853);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: color 0.2s;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--accent-color);
+        }
+
+        nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent-color);
+        }
+
+        /* Main */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 2.5rem;
+        }
+
+        @media (max-width: 900px) {
+            main {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Articles */
+        .articles-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .articles-header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .article-count {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .articles-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .article-card {
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.2s;
+        }
+
+        .article-card:hover {
+            background: var(--bg-secondary);
+            margin: 0 -1rem;
+            padding: 1.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        .article-card:last-child {
+            border-bottom: none;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-source {
+            background: var(--bg-tertiary);
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .article-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .article-title a:hover {
+            color: var(--accent-color);
+        }
+
+        .article-summary {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .article-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .article-tags {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            background: var(--bg-secondary);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        .read-more {
+            color: var(--accent-color);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .read-more:hover {
+            text-decoration: underline;
+        }
+
+        /* Sidebar */
+        aside {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .sidebar-section {
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1rem;
+        }
+
+        .category-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .category-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6rem 0.8rem;
+            background: var(--bg-secondary);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .category-item:hover {
+            background: var(--bg-tertiary);
+            transform: translateX(4px);
+        }
+
+        .category-count {
+            background: var(--bg-color);
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Newsletter */
+        .newsletter {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            color: white;
+        }
+
+        .newsletter h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .newsletter p {
+            color: #999;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .newsletter-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .newsletter-form input {
+            padding: 0.75rem;
+            border: 1px solid #444;
+            border-radius: 6px;
+            background: #333;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .newsletter-form input::placeholder {
+            color: #666;
+        }
+
+        .newsletter-form button {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .newsletter-form button:hover {
+            background: var(--accent-hover);
+        }
+
+        /* Trending Tags */
+        .trending-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .trending-tag {
+            background: var(--bg-secondary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            transition: all 0.2s;
+        }
+
+        .trending-tag:hover {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary-color);
+            color: white;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h4 {
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .footer-section a {
+            color: #888;
+            display: block;
+            margin-bottom: 0.6rem;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid #333;
+            text-align: center;
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        /* Article View Page */
+        .article-view {
+            max-width: 740px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .article-view .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .article-view .back-link:hover {
+            color: var(--accent-color);
+        }
+
+        .article-view header {
+            position: static;
+            background: none;
+            border: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .article-view .article-title {
+            font-size: 2.2rem;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .article-view .article-meta {
+            font-size: 0.9rem;
+        }
+
+        .article-view .article-content {
+            font-family: var(--font-serif);
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: var(--primary-color);
+        }
+
+        .article-view .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-view .article-content h2 {
+            font-size: 1.5rem;
+            margin: 2.5rem 0 1rem;
+        }
+
+        .article-view .article-content h3 {
+            font-size: 1.2rem;
+            margin: 2rem 0 0.75rem;
+        }
+
+        .article-view .article-content strong {
+            font-weight: 600;
+        }
+
+        .article-view .article-content a {
+            color: var(--accent-color);
+            text-decoration: underline;
+        }
+
+        .article-view .article-content ul, .article-view .article-content ol {
+            margin: 1rem 0 1.5rem 1.5rem;
+        }
+
+        .article-view .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .article-view .article-content blockquote {
+            border-left: 3px solid var(--accent-color);
+            padding-left: 1rem;
+            margin: 1.5rem 0;
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        .article-view .source-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            padding: 0.75rem 1rem;
+            background: var(--bg-secondary);
+            border-radius: 6px;
+            color: var(--accent-color);
+            font-weight: 500;
+        }
+
+        .article-view .source-link:hover {
+            background: var(--bg-tertiary);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .header-inner {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .article-view .article-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-inner">
+            <a href="/" class="logo">
+                <div class="logo-icon">T</div>
+                TechPulse
+            </a>
+            <nav>
+                <a href="/" class="active">Home</a>
+                <a href="/?cat=news">News</a>
+                <a href="/?cat=tutorials">Tutorials</a>
+                <a href="/?cat=tools">Tools</a>
+                <a href="/rss.xml">RSS</a>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <section class="articles-section">
+            <div class="articles-header">
+                <h1>Latest Articles</h1>
+                <span class="article-count" id="article-count">Loading...</span>
+            </div>
+            <div class="articles-list" id="articles-list">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading articles...</p>
+                </div>
+            </div>
+        </section>
+
+        <aside>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Categories</div>
+                <div class="category-list">
+                    <a href="/?cat=news" class="category-item">
+                        <span>Tech News</span>
+                        <span class="category-count">12</span>
+                    </a>
+                    <a href="/?cat=tutorials" class="category-item">
+                        <span>Tutorials</span>
+                        <span class="category-count">8</span>
+                    </a>
+                    <a href="/?cat=tools" class="category-item">
+                        <span>Tool Reviews</span>
+                        <span class="category-count">5</span>
+                    </a>
+                    <a href="/?cat=insights" class="category-item">
+                        <span>Insights</span>
+                        <span class="category-count">7</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Newsletter</div>
+                <div class="newsletter">
+                    <h3>Stay Updated</h3>
+                    <p>Get the latest tech news delivered to your inbox.</p>
+                    <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Thanks for subscribing!');">
+                        <input type="email" placeholder="Your email" required>
+                        <button type="submit">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Trending</div>
+                <div class="trending-tags">
+                    <a href="/?tag=ai" class="trending-tag">#ai</a>
+                    <a href="/?tag=python" class="trending-tag">#python</a>
+                    <a href="/?tag=webdev" class="trending-tag">#webdev</a>
+                    <a href="/?tag=javascript" class="trending-tag">#javascript</a>
+                    <a href="/?tag=machine-learning" class="trending-tag">#ml</a>
+                    <a href="/?tag=docker" class="trending-tag">#docker</a>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-section">
+                <h4>TechPulse</h4>
+                <p style="color: #888; font-size: 0.9rem;">Your daily source for tech news, tutorials, and insights.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Categories</h4>
+                <a href="/?cat=news">Tech News</a>
+                <a href="/?cat=tutorials">Tutorials</a>
+                <a href="/?cat=tools">Tool Reviews</a>
+                <a href="/?cat=insights">Insights</a>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <a href="/rss.xml">RSS Feed</a>
+                <a href="/?cat=about">About</a>
+                <a href="/?cat=contact">Contact</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2026 TechPulse. All rights reserved. | Powered by AI
+        </div>
+    </footer>
+
+    <script>
+        // Get URL params
+        const params = new URLSearchParams(window.location.search);
+        const articleFile = params.get('article');
+        const category = params.get('cat');
+
+        // Load article if viewing one
+        if (articleFile) {
+            loadArticle(articleFile);
+        } else {
+            loadArticles();
+        }
+
+        async function loadArticle(file) {
+            const main = document.getElementById('main-content');
+            main.innerHTML = `
+                <div class="article-view">
+                    <a href="/" class="back-link">← Back to Articles</a>
+                    <div class="loading"><div class="spinner"></div></div>
+                </div>
+            `;
+
+            try {
+                const response = await fetch('/output/' + file);
+                const html = await response.text();
+                
+                // Parse the HTML and extract content
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                
+                const title = doc.querySelector('title')?.textContent || 'Article';
+                const content = doc.querySelector('.content')?.innerHTML || '';
+                const meta = doc.querySelector('.meta')?.textContent || '';
+                const tags = doc.querySelector('.tags')?.innerHTML || '';
+
+                main.innerHTML = `
+                    <div class="article-view">
+                        <a href="/" class="back-link">← Back to Articles</a>
+                        <header>
+                            <h1 class="article-title">${title}</h1>
+                            <div class="article-meta">
+                                <span class="article-source">TechPulse</span>
+                                <span>•</span>
+                                <span>${meta}</span>
+                            </div>
+                        </header>
+                        <div class="article-content">
+                            ${content}
+                        </div>
+                        <div class="tags">${tags}</div>
+                    </div>
+                `;
+            } catch (e) {
+                main.innerHTML = '<div class="article-view"><p>Article not found.</p><a href="/">Go Home</a></div>';
+            }
+        }
+
+        async function loadArticles() {
+            const container = document.getElementById('articles-list');
+            const countEl = document.getElementById('article-count');
+
+            try {
+                // Fetch list of HTML files from output directory
+                const response = await fetch('/output/');
+                const text = await response.text();
+                
+                // Parse HTML to find links
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(text, 'text/html');
+                const links = Array.from(doc.querySelectorAll('a'))
+                    .map(a => a.href)
+                    .filter(href => href.endsWith('.html'))
+                    .map(href => href.split('/').pop())
+                    .slice(0, 20);
+
+                if (links.length === 0) {
+                    container.innerHTML = '<div class="loading"><p>No articles yet. Run the automation to generate content!</p></div>';
+                    countEl.textContent = '0 articles';
+                    return;
+                }
+
+                // Load each article and display summary
+                const articles = await Promise.all(
+                    links.map(async (file) => {
+                        try {
+                            const res = await fetch('/output/' + file);
+                            const html = await res.text();
+                            const doc = parser.parseFromString(html, 'text/html');
+                            
+                            const title = doc.querySelector('title')?.textContent?.replace(' - TechPulse', '') || 'Untitled';
+                            const content = doc.querySelector('.content')?.textContent || '';
+                            const summary = content.slice(0, 200).replace(/\n/g, ' ') + '...';
+                            const meta = doc.querySelector('.meta')?.textContent || '';
+                            const tags = doc.querySelector('.tags')?.innerHTML || '';
+
+                            return { file, title, summary: summary.slice(0, 150), meta, tags };
+                        } catch (e) {
+                            return null;
+                        }
+                    })
+                );
+
+                const validArticles = articles.filter(a => a !== null);
+                countEl.textContent = `${validArticles.length} articles`;
+
+                container.innerHTML = validArticles.map(article => `
+                    <article class="article-card">
+                        <div class="article-meta">
+                            <span class="article-source">TechPulse</span>
+                        </div>
+                        <h2 class="article-title">
+                            <a href="/?article=${article.file}">${article.title}</a>
+                        </h2>
+                        <p class="article-summary">${article.summary}</p>
+                        <div class="article-footer">
+                            <div class="article-tags">${article.tags}</div>
+                            <a href="/?article=${article.file}" class="read-more">Read more →</a>
+                        </div>
+                    </article>
+                `).join('');
+
+            } catch (e) {
+                container.innerHTML = '<div class="loading"><p>Error loading articles. Make sure the server is running.</p></div>';
+                console.error(e);
+            }
+        }
+    </script>
+</body>
+</html>
