@@ -292,6 +292,15 @@
             color: var(--primary-color);
             margin-bottom: 0.5rem;
             line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .article-title a {
+            color: inherit;
+            text-decoration: none;
         }
 
         .article-title a:hover {
@@ -304,7 +313,7 @@
             line-height: 1.6;
             margin-bottom: 0.75rem;
             display: -webkit-box;
-            -webkit-line-clamp: 2;
+            -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
@@ -882,35 +891,36 @@
                 const response = await fetch('/output/' + file);
                 const html = await response.text();
                 
-                // Parse the HTML and extract content
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
                 
-                const title = doc.querySelector('title')?.textContent || 'Article';
+                const title = (doc.querySelector('title')?.textContent || 'Article').replace(' - TechPulse', '').replace(/\*\*/g, '').trim();
                 const content = doc.querySelector('.content')?.innerHTML || '';
                 const meta = doc.querySelector('.meta')?.textContent || '';
                 const tags = doc.querySelector('.tags')?.innerHTML || '';
 
-                // Clean up the content
+                // Clean content - remove ** and fix formatting
                 const cleanContent = content
+                    .replace(/\*\*/g, '')
                     .replace(/<br><br>/g, '</p><p>')
-                    .replace(/<p><strong>/g, '<p><strong>')
+                    .replace(/<p>/g, '<p>')
                     .replace(/<strong>/g, '<h3>')
                     .replace(/<\/strong>/g, '</h3>')
                     .replace(/<em>/g, '<li>')
                     .replace(/<\/em>/g, '</li>')
                     .replace(/<pre>/g, '<pre><code>')
-                    .replace(/<\/pre>/g, '</code></pre>');
+                    .replace(/<\/pre>/g, '</code></pre>')
+                    .replace(/====+/g, '')
+                    .replace(/----+/g, '');
 
                 main.innerHTML = `
                     <article class="article-full">
                         <a href="/" class="back-link">← Back to Articles</a>
                         
-                        <!-- Ad in article -->
                         <div class="article-ad"><div id="container-45536f5d13364ca20573598656dee2c4"></div></div>
                         
                         <header class="article-header">
-                            <h1 class="article-title">${title.replace(' - TechPulse', '')}</h1>
+                            <h1 class="article-title">${title}</h1>
                             <div class="article-meta">
                                 <span class="article-source">TechPulse</span>
                                 <span>•</span>
@@ -924,7 +934,6 @@
                         
                         <div class="article-tags">${tags}</div>
                         
-                        <!-- Smart Link Ad -->
                         <div class="smart-link-ad">
                             <a href="https://www.profitablecpmratenetwork.com/ne52k66wv?key=dfef6a220fdf4b786aa36f64924efede" target="_blank" rel="nofollow">
                                 🔥 Hot Tech Deals - Check Out These Amazing Offers!
@@ -990,22 +999,28 @@
                 return;
             }
 
-            container.innerHTML = validArticles.map((article, index) => `
+            container.innerHTML = validArticles.map((article, index) => {
+                // Clean title - remove ** markers
+                const cleanTitle = article.title.replace(/\*\*/g, '').replace(/- TechPulse$/, '').trim();
+                // Clean summary - remove HTML tags and markdown
+                const cleanSummary = article.summary.replace(/<\/?[^>]+(>|$)/g, '').replace(/\*\*/g, '').trim();
+                
+                return `
                 <article class="article-card">
                     ${index === 0 ? '<div class="ad-banner-top"><div id="container-45536f5d13364ca20573598656dee2c4"></div></div>' : ''}
                     <div class="article-meta">
                         <span class="article-source">TechPulse</span>
                     </div>
                     <h2 class="article-title">
-                        <a href="/?article=${article.file}">${article.title}</a>
+                        <a href="/?article=${article.file}">${cleanTitle}</a>
                     </h2>
-                    <p class="article-summary">${article.summary}</p>
+                    <p class="article-summary">${cleanSummary}</p>
                     <div class="article-footer">
                         <div class="article-tags">${article.tags}</div>
                         <a href="/?article=${article.file}" class="read-more">Read more →</a>
                     </div>
                 </article>
-            `).join('');
+            `}).join('');
         }
     </script>
 </body>
