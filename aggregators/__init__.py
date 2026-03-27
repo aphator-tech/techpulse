@@ -13,6 +13,10 @@ from .hackaday import HackadayAggregator, HackadayBlogAggregator
 from .producthunt import ProductHuntAggregator, ProductHuntTodayAggregator
 from .stackoverflow import StackOverflowAggregator
 from .medium import MediumAggregator
+from .rss import RSSFeedAggregator, WiredAggregator, TechCrunchAggregator
+from .smashing import SmashingMagazineAggregator
+from .webdev import CSSTricksAggregator, SitePointAggregator
+from .youtube import YouTubeTechAggregator
 
 
 # Registry of all available aggregators
@@ -59,6 +63,15 @@ AGGREGATORS = {
     
     # Medium
     'medium': lambda: MediumAggregator('technology'),
+    
+    # RSS Feeds
+    'rss_wired': lambda: WiredAggregator(),
+    'rss_techcrunch': lambda: TechCrunchAggregator(),
+    
+    # Web Dev
+    'smashing': lambda: SmashingMagazineAggregator(),
+    'csstricks': lambda: CSSTricksAggregator(),
+    'sitepoint': lambda: SitePointAggregator(),
 }
 
 
@@ -89,13 +102,8 @@ def get_all_aggregators() -> dict:
 
 
 def get_default_aggregators() -> list:
-    """Get list of default aggregator names to use.
-    
-    Returns:
-        List of aggregator names
-    """
+    """Get list of default aggregator names to use."""
     return [
-        'reddit_multi',
         'github_trending',
         'hackernews_top',
         'devto_trending',
@@ -103,4 +111,8 @@ def get_default_aggregators() -> list:
         'hackaday_projects',
         'stackoverflow',
         'medium',
+        'rss_wired',
+        'rss_techcrunch',
+        'smashing',
+        'csstricks',
     ]
