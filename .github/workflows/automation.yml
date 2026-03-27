@@ -29,7 +29,9 @@ jobs:
           enable-cache: true
           
       - name: Install dependencies
-        run: uv sync
+        run: |
+          pip install python-dotenv requests beautifulsoup4 groq openrouter google-generativeai
+          uv sync
         
       - name: Set up .env
         run: |
