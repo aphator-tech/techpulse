@@ -49,4 +49,5 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./frontend/
           port: 21
+          server-dir: /htdocs/
           pre-deploy: rm -rf * .[^.]* || true
