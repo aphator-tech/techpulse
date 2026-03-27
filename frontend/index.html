@@ -3,10 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Latest tech news, tutorials, and insights from trending sources">
-    <meta name="theme-color" content="#00a050">
+    <meta name="description" content="TechPulse - Your daily source for tech news, tutorials, and insights. AI-powered curation from Reddit, Hacker News, Dev.to and more.">
+    <meta name="keywords" content="tech news, programming, web development, python, javascript, AI, machine learning, tutorials">
+    <meta name="author" content="TechPulse">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="TechPulse - Your Daily Tech News Source">
+    <meta property="og:description" content="AI-powered tech news from Reddit, Hacker News, Dev.to & more">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://techpulse.xo.je">
     <title>TechPulse - Your Daily Tech News Source</title>
     <link rel="alternate" type="application/rss+xml" title="TechPulse RSS Feed" href="/rss.xml">
+    
+    <!-- Ads Scripts -->
+    <!-- Native Banner -->
+    <script async="async" data-cfasync="false" src="https://pl28992781.profitablecpmratenetwork.com/45536f5d13364ca20573598656dee2c4/invoke.js"></script>
+    <!-- Popunder -->
+    <script src="https://pl28992786.profitablecpmratenetwork.com/47/e2/30/47e2302df7cccaf160c208f1bc80aae3.js"></script>
+    <!-- Social Bar -->
+    <script src="https://pl28992788.profitablecpmratenetwork.com/78/c9/d3/78c9d3052d46c18b3489b9b8d19bd447.js"></script>
+    
     <style>
         :root {
             --primary-color: #1a1a1a;
@@ -177,6 +193,14 @@
             color: rgba(255,255,255,0.6);
             text-transform: uppercase;
             letter-spacing: 1px;
+        }
+        
+        .hero-ad {
+            margin-top: 2rem;
+            min-height: 90px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
         @media (max-width: 600px) {
@@ -441,6 +465,31 @@
             color: white;
         }
 
+        .ad-banner-top {
+            margin-bottom: 1rem;
+            min-height: 90px;
+        }
+        
+        /* Smart Link Ad */
+        .smart-link-ad {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .smart-link-ad a {
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+        }
+        
+        .smart-link-ad a:hover {
+            text-decoration: underline;
+        }
+
         /* Footer */
         footer {
             background: var(--primary-color);
@@ -645,10 +694,14 @@
             <h1>🤖 Your Daily Dose of Tech News</h1>
             <p>AI-powered curation from Reddit, Hacker News, Dev.to & more</p>
             <div class="hero-stats">
-                <div class="stat"><span>5</span><small>Articles</small></div>
+                <div class="stat"><span id="stat-articles">5</span><small>Articles</small></div>
                 <div class="stat"><span>4</span><small>Sources</small></div>
                 <div class="stat"><span>24/7</span><small>Automated</small></div>
             </div>
+        </div>
+        <!-- Native Banner Ad -->
+        <div class="hero-ad">
+            <div id="container-45536f5d13364ca20573598656dee2c4"></div>
         </div>
     </div>
 
@@ -713,6 +766,12 @@
                 </div>
             </div>
         </aside>
+        <!-- Smart Link Ad in Footer -->
+        <div class="smart-link-ad">
+            <a href="https://www.profitablecpmratenetwork.com/ne52k66wv?key=dfef6a220fdf4b786aa36f64924efede" target="_blank" rel="nofollow">
+                🔥 Hot Tech Deals - Check Out These Amazing Offers!
+            </a>
+        </div>
     </main>
 
     <footer>
@@ -800,8 +859,9 @@
         async function loadArticles() {
             const container = document.getElementById('articles-list');
             const countEl = document.getElementById('article-count');
+            const statEl = document.getElementById('stat-articles');
 
-            // Direct list of known articles (statically defined)
+            // List of all available articles
             const knownArticles = [
                 '2026-03-27-get-started-on-devto-a-beginners-guide-to-engage-with-the-community.html',
                 '2026-03-27-revolutionary-ai-development-agents-that-can-think-but-not-remember.html',
@@ -813,6 +873,7 @@
             if (knownArticles.length === 0) {
                 container.innerHTML = '<div class="loading"><p>No articles yet. Run the automation to generate content!</p></div>';
                 countEl.textContent = '0 articles';
+                if (statEl) statEl.textContent = '0';
                 return;
             }
 
@@ -821,6 +882,7 @@
                 knownArticles.map(async (file) => {
                     try {
                         const res = await fetch('/output/' + file);
+                        if (!res.ok) return null;
                         const html = await res.text();
                         const parser = new DOMParser();
                         const doc = parser.parseFromString(html, 'text/html');
@@ -840,9 +902,16 @@
 
             const validArticles = articles.filter(a => a !== null);
             countEl.textContent = `${validArticles.length} articles`;
+            if (statEl) statEl.textContent = validArticles.length;
 
-            container.innerHTML = validArticles.map(article => `
+            if (validArticles.length === 0) {
+                container.innerHTML = '<div class="loading"><p>No articles available yet.</p></div>';
+                return;
+            }
+
+            container.innerHTML = validArticles.map((article, index) => `
                 <article class="article-card">
+                    ${index === 0 ? '<div class="ad-banner-top"><div id="container-45536f5d13364ca20573598656dee2c4"></div></div>' : ''}
                     <div class="article-meta">
                         <span class="article-source">TechPulse</span>
                     </div>
