@@ -23,15 +23,8 @@ jobs:
         with:
           python-version: '3.11'
           
-      - name: Install uv
-        uses: astral-sh/setup-uv@v4
-        with:
-          enable-cache: true
-          
       - name: Install dependencies
-        run: |
-          pip install python-dotenv requests beautifulsoup4 groq openrouter google-generativeai apscheduler openai anthropic huggingface-hub GitPython
-          uv sync
+        run: pip install python-dotenv requests beautifulsoup4 groq openrouter google-generativeai apscheduler openai anthropic huggingface-hub GitPython
         
       - name: Set up .env
         run: |
