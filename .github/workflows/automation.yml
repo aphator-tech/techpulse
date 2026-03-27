@@ -47,7 +47,7 @@ jobs:
           cp content_data/output/*.html frontend/output/
           
       - name: Deploy to InfinityFree via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.2.7
+        uses: SamKirkland/FTP-Deploy-Action@4.2.7
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
