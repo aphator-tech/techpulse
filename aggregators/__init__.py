@@ -11,6 +11,8 @@ from .hackernews import HackerNewsAggregator, HackerNewsNewAggregator, HackerNew
 from .devto import DevToAggregator, DevToLatestAggregator
 from .hackaday import HackadayAggregator, HackadayBlogAggregator
 from .producthunt import ProductHuntAggregator, ProductHuntTodayAggregator
+from .stackoverflow import StackOverflowAggregator
+from .medium import MediumAggregator
 
 
 # Registry of all available aggregators
@@ -51,6 +53,12 @@ AGGREGATORS = {
     'producthunt_tech': lambda: ProductHuntAggregator('tech'),
     'producthunt_developer': lambda: ProductHuntAggregator('developer-tools'),
     'producthunt_today': lambda: ProductHuntTodayAggregator(),
+    
+    # Stack Overflow
+    'stackoverflow': lambda: StackOverflowAggregator('python'),
+    
+    # Medium
+    'medium': lambda: MediumAggregator('technology'),
 }
 
 
@@ -93,4 +101,6 @@ def get_default_aggregators() -> list:
         'devto_trending',
         'huggingface_models',
         'hackaday_projects',
+        'stackoverflow',
+        'medium',
     ]

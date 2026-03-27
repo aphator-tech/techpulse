@@ -486,8 +486,65 @@
             text-decoration: none;
         }
         
-        .smart-link-ad a:hover {
-            text-decoration: underline;
+        /* Article Full View */
+        .article-full {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .article-ad {
+            margin-bottom: 1.5rem;
+            min-height: 90px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .article-header {
+            margin-bottom: 2rem;
+        }
+        
+        .article-full .article-title {
+            font-size: 2rem;
+            line-height: 1.3;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .article-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-color);
+        }
+        
+        .article-content p {
+            margin-bottom: 1rem;
+        }
+        
+        .article-content h3 {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            margin: 1.5rem 0 0.5rem;
+        }
+        
+        .article-content li {
+            margin-bottom: 0.5rem;
+            margin-left: 1.5rem;
+        }
+        
+        .article-content pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        
+        .article-content code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
         }
 
         /* Footer */
@@ -834,22 +891,46 @@
                 const meta = doc.querySelector('.meta')?.textContent || '';
                 const tags = doc.querySelector('.tags')?.innerHTML || '';
 
+                // Clean up the content
+                const cleanContent = content
+                    .replace(/<br><br>/g, '</p><p>')
+                    .replace(/<p><strong>/g, '<p><strong>')
+                    .replace(/<strong>/g, '<h3>')
+                    .replace(/<\/strong>/g, '</h3>')
+                    .replace(/<em>/g, '<li>')
+                    .replace(/<\/em>/g, '</li>')
+                    .replace(/<pre>/g, '<pre><code>')
+                    .replace(/<\/pre>/g, '</code></pre>');
+
                 main.innerHTML = `
-                    <div class="article-view">
+                    <article class="article-full">
                         <a href="/" class="back-link">← Back to Articles</a>
-                        <header>
-                            <h1 class="article-title">${title}</h1>
+                        
+                        <!-- Ad in article -->
+                        <div class="article-ad"><div id="container-45536f5d13364ca20573598656dee2c4"></div></div>
+                        
+                        <header class="article-header">
+                            <h1 class="article-title">${title.replace(' - TechPulse', '')}</h1>
                             <div class="article-meta">
                                 <span class="article-source">TechPulse</span>
                                 <span>•</span>
                                 <span>${meta}</span>
                             </div>
                         </header>
+                        
                         <div class="article-content">
-                            ${content}
+                            ${cleanContent}
                         </div>
-                        <div class="tags">${tags}</div>
-                    </div>
+                        
+                        <div class="article-tags">${tags}</div>
+                        
+                        <!-- Smart Link Ad -->
+                        <div class="smart-link-ad">
+                            <a href="https://www.profitablecpmratenetwork.com/ne52k66wv?key=dfef6a220fdf4b786aa36f64924efede" target="_blank" rel="nofollow">
+                                🔥 Hot Tech Deals - Check Out These Amazing Offers!
+                            </a>
+                        </div>
+                    </article>
                 `;
             } catch (e) {
                 main.innerHTML = '<div class="article-view"><p>Article not found.</p><a href="/">Go Home</a></div>';
